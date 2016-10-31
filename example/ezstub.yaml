@@ -1,0 +1,26 @@
+title: Stubs for some test API
+port: 8080
+endpoints:
+- url: /test
+  description: Get all users
+  method: GET
+  validation:
+    headers:
+    - key: Authorization
+      value: "Basic dXNlcjpwYXNzd29yZAo="
+    params:
+    - key: token
+      value: somevalue
+  response:
+    data: dXNlcjpwYXNzd29yZAo=
+    status: 200
+- url: /users
+  description: Check health
+  method: GET
+  response:
+    headers:
+     - key: Content-Type
+       value: application/json
+    file: example/users.json
+    status: 200
+
