@@ -25,9 +25,8 @@ func (s Stub) dump() {
 
 // Route routes requests to different endpoints.
 type Route struct {
-	url        string
-	endpoints  map[Method]Endpoint
-	validators Validators
+	url       string
+	endpoints map[Method]Endpoint
 }
 
 // AddEndpoint adds an endpoint to the route.
