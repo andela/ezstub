@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -10,6 +11,16 @@ type Stub struct {
 	title      string
 	routes     map[string]Route
 	validators Validators
+}
+
+func (s Stub) dump() {
+	for url, route := range s.routes {
+		fmt.Print(url)
+		for method := range route.endpoints {
+			fmt.Printf(" %v ", method)
+		}
+		fmt.Println()
+	}
 }
 
 // Route routes requests to different endpoints.

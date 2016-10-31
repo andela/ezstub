@@ -3,7 +3,7 @@ port: 8080
 endpoints:
 - url: /test
   description: Get all users
-  method: GET
+  method: POST
   validation:
     headers:
     - key: Authorization

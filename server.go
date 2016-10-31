@@ -36,6 +36,7 @@ func (s *Server) Start() error {
 	fmt.Println(s.stub.title)
 	fmt.Println("ezstub listening on", s.Addr())
 	fmt.Println()
+	s.stub.dump()
 	return http.ListenAndServe(s.Addr(), s)
 }
 
