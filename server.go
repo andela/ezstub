@@ -33,9 +33,10 @@ func (s *Server) Addr() string {
 
 // Start starts the server.
 func (s *Server) Start() error {
-	fmt.Println(s.stub.title)
-	fmt.Println("ezstub listening on", s.Addr())
+	fmt.Println("Listening on", s.Addr())
 	fmt.Println()
+	fmt.Println(s.stub.title)
+	fmt.Println("Routes:")
 	s.stub.dump()
 	return http.ListenAndServe(s.Addr(), s)
 }
@@ -51,19 +52,23 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	route, ok := s.stub.routes[r.URL.Path]
 	if !ok {
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		errorResponse(w, http.StatusNotFound)
 		return
 	}
 	endpoint, ok := route.endpoints[Method(r.Method)]
 	if !ok {
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		errorResponse(w, http.StatusNotFound)
 		return
 	}
 	if !endpoint.validators.Valid(r) {
-		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		errorResponse(w, http.StatusForbidden)
 		return
 	}
 
 	// Response
 	endpoint.WriteResponse(w)
+}
+
+func errorResponse(w http.ResponseWriter, code int) {
+	http.Error(w, http.StatusText(code), code)
 }

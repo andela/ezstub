@@ -1,12 +1,11 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
-
-	"flag"
 
 	"gopkg.in/yaml.v2"
 )

@@ -15,7 +15,7 @@ type Stub struct {
 
 func (s Stub) dump() {
 	for url, route := range s.routes {
-		fmt.Print(url)
+		fmt.Print(" ", url)
 		for method := range route.endpoints {
 			fmt.Printf(" %v ", method)
 		}
