@@ -95,7 +95,7 @@ file: users.json
 status: 200
 ```
  One of `data` or `file` should be used.
- * `headers` [array]: Request headers. Array of key-values. 
+ * `headers` [array]: Response headers. Array of key-values. 
  * `data` [string]: base64 encoded data.
  * `file` [string]: file path.
  * `status` [int]: status code. 
