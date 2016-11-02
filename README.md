@@ -80,8 +80,11 @@ headers:
 params:
 - key: token
   value: somevalue
+- key: another_token
+  value: /r/^(someregex)$
 ```
 Requests missing the following key-values will get a 403 (Forbidden) response.
+`values` prefixed with `/r/` will be matched as regexp.
 * `headers` [array]: Request headers. Array of key-values. 
 * `params` [array]: Form/query parameters. Array of key-values. 
 
