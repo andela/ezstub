@@ -6,14 +6,20 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
+
+// configDir stores directory of the configuration file.
+var configDir string
 
 func main() {
 	configFile := "ezstub.yaml"
 	flag.StringVar(&configFile, "c", configFile, "Configuration file")
 	flag.Parse()
+
+	configDir = filepath.Dir(configFile)
 
 	var config Config
 	b, err := ioutil.ReadFile(configFile)

@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
 )
 
 // Config holds the configuration.
@@ -66,6 +67,10 @@ func (r ResponseConfig) Response() (response Response, err error) {
 	response.headers = r.Headers
 	switch {
 	case r.File != "":
+		// File path is relative to config file dir if not absolute.
+		if !filepath.IsAbs(r.File) && configDir != "" {
+			r.File = filepath.Join(configDir, r.File)
+		}
 		response.body, err = ioutil.ReadFile(r.File)
 	case r.Data != "":
 		response.body, err = base64.StdEncoding.DecodeString(r.Data)

@@ -21,6 +21,6 @@ endpoints:
     headers:
      - key: Content-Type
        value: application/json
-    file: example/users.json
+    file: users.json
     status: 200
 
