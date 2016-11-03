@@ -11,11 +11,15 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// configDir stores directory of the configuration file.
-var configDir string
+var (
+	// configDir is the directory of the configuration file.
+	configDir string
+
+	// configFile is the configuration file.
+	configFile = "ezstub.yaml"
+)
 
 func main() {
-	configFile := "ezstub.yaml"
 	flag.StringVar(&configFile, "c", configFile, "Configuration file")
 	flag.Parse()
 
@@ -27,7 +31,7 @@ func main() {
 
 	exitIfErr(yaml.Unmarshal(b, &config))
 
-	server, err := NewServer(config)
+	server, err := newServer(config)
 	exitIfErr(err)
 
 	log.Fatal(server.Start())

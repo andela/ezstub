@@ -14,7 +14,7 @@ type Server struct {
 }
 
 // NewServer creates a new Server.
-func NewServer(config Config) (*Server, error) {
+func newServer(config Config) (*Server, error) {
 	stub, err := initStub(config)
 	if err != nil {
 		return nil, err
