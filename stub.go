@@ -52,7 +52,7 @@ type Endpoint struct {
 func (e Endpoint) WriteResponse(w http.ResponseWriter) {
 	// Headers
 	for _, header := range e.response.headers {
-		w.Header().Add(header.Key, header.Value)
+		w.Header().Add(header.Key, header.ValueStr())
 	}
 
 	// Response

@@ -11,16 +11,28 @@ endpoints:
     params:
     - key: token
       value: somevalue
+      response:
   response:
-    data: dXNlcjpwYXNzd29yZAo=
+    data: dXNlcjpwYXNzd29yZAo=    
     status: 200
 - url: /users
   description: Check health
-  method: GET
   response:
     headers:
      - key: Content-Type
        value: application/json
     file: users.json
     status: 200
+- url: /testuser
+  cors: "*"
+  description: Test json validation
+  method: POST
+  validation:
+    json:
+    - key: users.0.name
+      value: John Doe
+  response:
+    data: dXNlcjpwYXNzd29yZAo=
+    status: 200
 
+ 

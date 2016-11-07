@@ -1,9 +1,11 @@
 package main
 
-import "testing"
-import "net/http"
-
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+	"net/http"
+	"testing"
+)
 
 func TestValidator(t *testing.T) {
 	tests := []KV{
@@ -23,7 +25,7 @@ func TestValidator(t *testing.T) {
 		}
 
 		// Header Validator
-		req.Header.Add(test.Key, test.Value)
+		req.Header.Add(test.Key, test.ValueStr())
 		if !HeaderValidator(test).Valid(req) {
 			t.Errorf("Test %d: headers should be valid", i)
 		}
@@ -34,6 +36,34 @@ func TestValidator(t *testing.T) {
 		v.Add(HeaderValidator(test))
 		if !v.Valid(req) {
 			t.Errorf("Test %d: params and headers should be valid", i)
+		}
+	}
+}
+
+func TestJSONValidator(t *testing.T) {
+	tests := []KV{
+		{"id", float64(1)},
+		{"user.name", "John Doe"},
+		{"user.titles.1", "Dr"},
+		{"user.schools.0.name", "Queens College"},
+	}
+	jsonStr := `{
+		"id" : 1,
+		"user" : {
+			"name" : "John Doe",
+			"titles" : ["Mr", "Dr"],
+			"schools" : [
+				{ "name" : "Queens College" }
+			]
+		}
+	}`
+	req, err := http.NewRequest("POST", "/", bytes.NewBufferString(jsonStr))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for i, test := range tests {
+		if !JSONValidator(test).Valid(req) {
+			t.Errorf("Test %d: validation failed for %v. Expected %#v", i, test.Key, test.Value)
 		}
 	}
 }

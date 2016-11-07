@@ -65,12 +65,14 @@ endpoints: ...
   method: GET
   response: ...
   validation: ...
+  cors: http://myserver.com
 ``` 
 * `url` [string]: endpoint url.
 * `description` [string]: endpoint description.
 * `method` [string]: request method.
 * `validation` [array]: array of [validations](#validation).
 * `response`: [response](#response).
+* `cors` [string]: Add cross origin site scripting headers for the host.
 
 #### validation
 ```yaml
@@ -82,11 +84,15 @@ params:
   value: somevalue
 - key: another_token
   value: /r/^(someregex)$
+json:
+- key: users.0.name
+  value: John Doe
 ```
 Requests missing the following key-values will get a 403 (Forbidden) response.
 `values` prefixed with `/r/` will be matched as regexp.
 * `headers` [array]: Request headers. Array of key-values. 
 * `params` [array]: Form/query parameters. Array of key-values. 
+* `json` [array]: Validate against request body as JSON. Array of key-values.
 
 #### response
 ```yaml

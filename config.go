@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/base64"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -22,6 +23,7 @@ type EndpointConfig struct {
 	Method      Method           `yaml:"method"`
 	Validation  ValidationConfig `yaml:"validation"`
 	Response    ResponseConfig   `yaml:"response"`
+	Cors        string           `yaml:"cors"`
 }
 
 // Endpoint converts EndpointConfig into an Endpoint.
@@ -33,6 +35,13 @@ func (e EndpointConfig) Endpoint() (Endpoint, error) {
 	if e.Method == "" {
 		e.Method = "GET"
 	}
+	if e.Cors != "" {
+		response.headers = append(response.headers,
+			KV{Key: "Access-Control-Allow-Origin", Value: e.Cors},
+			KV{Key: "Access-Control-Allow-Method", Value: e.Method},
+		)
+	}
+
 	// validators
 	var validators Validators
 	for _, kv := range e.Validation.Headers {
@@ -40,6 +49,9 @@ func (e EndpointConfig) Endpoint() (Endpoint, error) {
 	}
 	for _, kv := range e.Validation.Params {
 		validators.Add(ParamValidator(kv))
+	}
+	for _, kv := range e.Validation.JSON {
+		validators.Add(JSONValidator(kv))
 	}
 
 	return Endpoint{
@@ -82,12 +94,18 @@ func (r ResponseConfig) Response() (response Response, err error) {
 type ValidationConfig struct {
 	Headers []KV `yaml:"headers"`
 	Params  []KV `yaml:"params"`
+	JSON    []KV `yaml:"json"`
 }
 
 // KV is key value.
 type KV struct {
-	Key   string `yaml:"key"`
-	Value string `yaml:"value"`
+	Key   string      `yaml:"key"`
+	Value interface{} `yaml:"value"`
+}
+
+// ValueStr returns string representation of the value.
+func (kv KV) ValueStr() string {
+	return fmt.Sprint(kv.Value)
 }
 
 func initStub(config Config) (*Stub, error) {
